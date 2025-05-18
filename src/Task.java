@@ -47,18 +47,10 @@ public class Task {
 
     @Override
     public String toString() {
-        String result = "Task{" + "id=" + id + '\'' +
-                "name='" + name + '\'';
-
-        if (description == null) {
-            result += ", description=null" + '\'' +
-                    ", status=" + status + '}';
-        } else {
-            result += ", description=" + description + '\'' +
-                    ", status=" + status + '}';
-        }
-
-        return result;
+        return "Task{" + "id=" + id + '\'' +
+                "name='" + name + '\'' +
+                ", description=" + description + '\'' +
+                ", status=" + status + '}';
     }
 
     @Override

@@ -18,23 +18,15 @@ public class Epic extends Task {
     }
 
     public void removeSubtaskId(int subtaskId) {
-        subtasksId.remove(subtaskId);
+        subtasksId.remove((Integer) subtaskId);
     }
 
     @Override
     public String toString() {
-        String result = "Epic{" + "subtasksId=" + subtasksId + ", name='" + super.getName() + '\''
-                + ", id=" + super.getId();
-
-        if (super.getDescription() == null) {
-            result += ", description=null" + '\'' +
-                    ", status=" + super.getStatus() + '}';
-        } else {
-            result += ", description='" + super.getDescription() + '\'' +
-                    ", status=" + super.getStatus() + '}';
-        }
-
-        return result;
+        return "Epic{" + "subtasksId=" + subtasksId + ", name='" + super.getName() + '\''
+                + ", id=" + super.getId() +
+                ", description='" + super.getDescription() + '\'' +
+                ", status=" + super.getStatus() + '}';
     }
 
     @Override

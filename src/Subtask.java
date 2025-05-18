@@ -13,16 +13,10 @@ public class Subtask extends Task {
 
     @Override
     public String toString() {
-        String result = "Subtask{" + "epicId=" + epicId + ", name='" + super.getName() + '\''
-                + ", id=" + super.getId();
-
-        if (super.getDescription() == null) {
-            result += ", description=null" + ", status=" + super.getStatus() + '}';
-        } else {
-            result += ", description='" + super.getDescription() + '\'' + ", status=" + super.getStatus() + '}';
-        }
-
-        return result;
+        return "Subtask{" + "epicId=" + epicId + ", name='" + super.getName() + '\''
+                + ", id=" + super.getId() +
+                ", description='" + super.getDescription() + '\'' +
+                ", status=" + super.getStatus() + '}';
     }
 
     @Override
