@@ -1,44 +1,79 @@
-import java.util.HashMap;
 
-public abstract class Task {
-    protected final long id;
-    protected final String name;
-    protected final String description;
-    protected Status status;
-    public Task(long id, String name, String description) {
-        this.id = id;
+import java.util.Objects;
+
+public class Task {
+    private int id;
+    private String name;
+    private String description;
+    private Status status;
+
+    public Task(String name, Status status, String description) {
         this.name = name;
+        this.status = status;
         this.description = description;
-        this.status = Status.NEW;
     }
-    public long getId() {
-        return id;
-    }
+
     public String getName() {
         return name;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getDescription() {
         return description;
     }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public Status getStatus() {
         return status;
     }
+
     public void setStatus(Status status) {
         this.status = status;
     }
+
     @Override
     public String toString() {
-        return "Task{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", status=" + status +
-                '}';
-    }
-}
+        String result = "Task{" + "id=" + id + '\'' +
+                "name='" + name + '\'';
 
-class SimpleTask extends Task {
-    public SimpleTask(long id, String name, String description) {
-        super(id, name, description);
+        if (description == null) {
+            result += ", description=null" + '\'' +
+                    ", status=" + status + '}';
+        } else {
+            result += ", description=" + description + '\'' +
+                    ", status=" + status + '}';
+        }
+
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return id == task.id &&
+                Objects.equals(name, task.name) &&
+                Objects.equals(description, task.description) &&
+                status == task.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, description, status);
     }
 }

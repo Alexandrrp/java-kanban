@@ -1,37 +1,48 @@
 public class Main {
+
     public static void main(String[] args) {
-        TaskManager manager = new TaskManager();
+        TaskManager taskManager = new TaskManager();
 
-        // Создаём простую задачу
-        Task simpleTask = manager.createSimpleTask("Купить молоко", "Куплю завтра утром");
-        System.out.println("Task: " + simpleTask);
+        Task task1 = new Task("Task1", Status.NEW, "Description1");
+        taskManager.createTask(task1);
+        Task task2 = new Task("Task2", Status.IN_PROGRESS, "Description2");
+        taskManager.createTask(task2);
 
-        // Создаём эпик
-        Epic epic = manager.createEpic("Переезд", "Надо переехать в новый дом");
-        System.out.println("Epic: " + epic);
+        Epic epic1 = new Epic("Epic1", "Description1");
+        taskManager.createEpic(epic1);
+        Subtask subtask1 = new Subtask("Subtask1.1", Status.NEW, "SubTask Description1.1",
+                epic1.getId());
+        taskManager.createSubtask(subtask1);
+        Subtask subtask2 = new Subtask("Subtask1.2", Status.DONE, "SubTask Description1.2",
+                epic1.getId());
+        taskManager.createSubtask(subtask2);
 
-        // Создаём две подзадачи
-        Subtask subtask1 = manager.createSubtask(epic, "Упаковать вещи", "Закончить упаковку вещей");
-        Subtask subtask2 = manager.createSubtask(epic, "Нанять грузчиков", "Позвонить друзьям");
-        System.out.println("Subtask 1: " + subtask1);
-        System.out.println("Subtask 2: " + subtask2);
+        Epic epic2 = new Epic("Epic1", "Description1");
+        taskManager.createEpic(epic2);
+        Subtask subtask3 = new Subtask("Subtask2.1", Status.DONE, "Description2.1",
+                epic2.getId());
+        taskManager.createSubtask(subtask3);
 
-        // Проверим, что эпик помечен как "NEW"
-        System.out.println("Epic Status: " + epic.getStatus());
+        System.out.println(taskManager.getAllTasks());
+        System.out.println(taskManager.getAllEpics());
+        System.out.println(taskManager.getAllSubtasks());
+        System.out.println();
 
-        // Ставим первую подзадачу в прогресс
-        subtask1.setStatus(Status.IN_PROGRESS);
-        manager.updateAllStatuses();
-        System.out.println("Epic Status after one subtask in progress: " + epic.getStatus());
-
-        // Завершаем вторую подзадачу
-        subtask2.setStatus(Status.DONE);
-        manager.updateAllStatuses();
-        System.out.println("Epic Status after second subtask done: " + epic.getStatus());
-
-        // Завершена первая подзадача
         subtask1.setStatus(Status.DONE);
-        manager.updateAllStatuses();
-        System.out.println("Epic Status after both subtasks are done: " + epic.getStatus());
+        subtask3.setStatus(Status.IN_PROGRESS);
+        taskManager.updateEpic(epic1);
+        taskManager.updateEpic(epic2);
+
+        System.out.println(taskManager.getAllEpics());
+        System.out.println(taskManager.getAllSubtasks());
+        System.out.println();
+
+        taskManager.deleteTask(task2.getId());
+        taskManager.deleteSubtask(subtask1.getId());
+        taskManager.deleteEpic(epic2.getId());
+
+        System.out.println(taskManager.getAllTasks());
+        System.out.println(taskManager.getAllEpics());
+        System.out.println(taskManager.getAllSubtasks());
     }
 }

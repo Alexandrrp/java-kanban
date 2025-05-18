@@ -1,56 +1,53 @@
-import java.util.*;
+import java.util.Objects;
+import java.util.ArrayList;
 
 public class Epic extends Task {
-    private final Set<Long> subtasksIds = new HashSet<>();
+    private ArrayList<Integer> subtasksId;
 
-    public Epic(long id, String name, String description) {
-        super(id, name, description);
+    public Epic(String name, String description) {
+        super(name, Status.NEW, description);
+        subtasksId = new ArrayList<>();
     }
 
-    public void addSubtask(Subtask subtask) {
-        subtasksIds.add(subtask.getId());
+    public ArrayList<Integer> getSubtasksIds() {
+        return subtasksId;
     }
 
-    public Collection<Long> getSubtasksIds() {
-        return Collections.unmodifiableSet(subtasksIds);
+    public void addSubtaskId(int subtaskId) {
+        subtasksId.add(subtaskId);
     }
 
-    /**
-     * Определим автоматическое обновление статуса эпика
-     */
-    public void updateStatus(Collection<Task> allTasks) {
-        List<Status> statuses = new ArrayList<>();
-        for (long subtaskId : subtasksIds) {
-            Optional<Task> maybeSubtask = findTask(allTasks, subtaskId);
-            if (maybeSubtask.isPresent()) {
-                Subtask subtask = (Subtask) maybeSubtask.get();
-                statuses.add(subtask.getStatus());
-            }
-        }
-
-        if (statuses.contains(Status.IN_PROGRESS)) {
-            this.status = Status.IN_PROGRESS;
-        } else if (statuses.stream().allMatch(status -> status == Status.DONE)) {
-            this.status = Status.DONE;
-        } else {
-            this.status = Status.NEW;
-        }
-    }
-
-    private Optional<Task> findTask(Collection<Task> tasks, long id) {
-        return tasks.stream()
-                .filter(task -> task.getId() == id)
-                .findFirst();
+    public void removeSubtaskId(int subtaskId) {
+        subtasksId.remove(subtaskId);
     }
 
     @Override
     public String toString() {
-        return "Epic{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", status=" + status +
-                ", subtasksIds=" + subtasksIds +
-                '}';
+        String result = "Epic{" + "subtasksId=" + subtasksId + ", name='" + super.getName() + '\''
+                + ", id=" + super.getId();
+
+        if (super.getDescription() == null) {
+            result += ", description=null" + '\'' +
+                    ", status=" + super.getStatus() + '}';
+        } else {
+            result += ", description='" + super.getDescription() + '\'' +
+                    ", status=" + super.getStatus() + '}';
+        }
+
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Epic epic = (Epic) o;
+        return Objects.equals(subtasksId, epic.subtasksId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getDescription(), getStatus(), subtasksId);
     }
 }
