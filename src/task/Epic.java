@@ -51,6 +51,6 @@ public class Epic extends Task {
 
     @Override
     public void setStatus(Status status) {
-        throw new UnsupportedOperationException("Используйте updateEpicStatus()");
+        throw new UnsupportedOperationException("Используйте updateStatus()");
     }
 }

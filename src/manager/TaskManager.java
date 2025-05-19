@@ -104,7 +104,6 @@ public class TaskManager {
             return;
         }
 
-        // Исправляем блок обработки подзадач
         ArrayList<Integer> invalidIds = new ArrayList<>();
 
         for (int subtaskId : epic.getSubtasksIds()) {
@@ -121,6 +120,7 @@ public class TaskManager {
             }
         }
 
+        // После завершения обхода удаляем ненужные идентификаторы
         for (int invalidId : invalidIds) {
             epic.removeSubtaskId(invalidId);
         }
