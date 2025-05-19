@@ -1,12 +1,19 @@
+package manager;
+
 import java.util.HashMap;
 import java.util.ArrayList;
+
+import task.Epic;
+import task.Subtask;
+import task.Task;
+import task.Status;
 public class TaskManager {
     private HashMap<Integer, Task> tasks = new HashMap<>();
     private HashMap<Integer, Epic> epics = new HashMap<>();
     private HashMap<Integer, Subtask> subtasks = new HashMap<>();
     private int nextId = 1;
 
-    //методы для класса Task
+    //методы для класса task.Task
     public ArrayList<Task> getAllTasks() {
         return new ArrayList<>(tasks.values());
     }
@@ -35,7 +42,7 @@ public class TaskManager {
         }
     }
 
-    //методы для класса Epic
+    //методы для класса task.Epic
     public ArrayList<Epic> getAllEpics() {
         return new ArrayList<>(epics.values());
     }
@@ -89,16 +96,21 @@ public class TaskManager {
         boolean allNew = true;
         Epic epic = epics.get(epicId);
 
-        if (epic == null || epic.getSubtasksIds().isEmpty()) {
-            if (epic != null) {
-                epic.setStatus(Status.NEW);
-            }
+        if (epic == null) {
             return;
         }
+        if (epic.getSubtasksIds().isEmpty()) {
+            epic.setStatus(Status.NEW);
+            return;
+        }
+
+        // Исправляем блок обработки подзадач
+        ArrayList<Integer> invalidIds = new ArrayList<>();
 
         for (int subtaskId : epic.getSubtasksIds()) {
             Subtask subtask = subtasks.get(subtaskId);
             if (subtask == null) {
+                invalidIds.add(subtaskId);
                 continue;
             }
             if (subtask.getStatus() != Status.DONE) {
@@ -107,6 +119,10 @@ public class TaskManager {
             if (subtask.getStatus() != Status.NEW) {
                 allNew = false;
             }
+        }
+
+        for (int invalidId : invalidIds) {
+            epic.removeSubtaskId(invalidId);
         }
 
         if (allDone) {
@@ -118,7 +134,7 @@ public class TaskManager {
         }
     }
 
-    //методы для класса Subtask
+    //методы для класса task.Subtask
     public ArrayList<Subtask> getAllSubtasks() {
         return new ArrayList<>(subtasks.values());
     }
