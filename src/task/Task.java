@@ -46,6 +46,10 @@ public class Task {
         this.status = status;
     }
 
+    protected void internalSetStatus(Status status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "task.Task{" + "id=" + id + '\'' +

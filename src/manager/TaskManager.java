@@ -100,7 +100,7 @@ public class TaskManager {
             return;
         }
         if (epic.getSubtasksIds().isEmpty()) {
-            epic.setStatus(Status.NEW);
+            epic.updateStatus(Status.NEW);
             return;
         }
 
@@ -126,11 +126,11 @@ public class TaskManager {
         }
 
         if (allDone) {
-            epic.setStatus(Status.DONE);
+            epic.updateStatus(Status.DONE);
         } else if (allNew) {
-            epic.setStatus(Status.NEW);
+            epic.updateStatus(Status.NEW);
         } else {
-            epic.setStatus(Status.IN_PROGRESS);
+            epic.updateStatus(Status.IN_PROGRESS);
         }
     }
 

@@ -23,6 +23,10 @@ public class Epic extends Task {
         subtasksId.remove((Integer) subtaskId);
     }
 
+    public void updateStatus(Status status) {
+        super.internalSetStatus(status);
+    }
+
     @Override
     public String toString() {
         return "task.Epic{" + "subtasksId=" + subtasksId + ", name='" + super.getName() + '\''
@@ -43,5 +47,10 @@ public class Epic extends Task {
     @Override
     public int hashCode() {
         return Objects.hash(getId(), getName(), getDescription(), getStatus(), subtasksId);
+    }
+
+    @Override
+    public void setStatus(Status status) {
+        throw new UnsupportedOperationException("Используйте updateEpicStatus()");
     }
 }
