@@ -1,12 +1,12 @@
 package task;
 
 import manager.TaskManager;
-import task.Epic;
+import manager.TaskManagerImplimentation;
 
 public class Main {
 
     public static void main(String[] args) {
-        TaskManager taskManager = new TaskManager();
+        TaskManager taskManager = new TaskManagerImplimentation();
 
         Task task1 = new Task("Task1", Status.NEW, "Description1");
         taskManager.createTask(task1);
