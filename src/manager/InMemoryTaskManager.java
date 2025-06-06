@@ -48,7 +48,20 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task createTask(Task task) {
-        task.setId(nextId++);
+        // Проверяем, задан ли ID вручную
+        if (task.getId() != 0) {
+            // Если задача с таким ID уже существует — бросаем исключение
+            if (tasks.containsKey(task.getId())) {
+                throw new IllegalArgumentException("Задача с ID = " + task.getId() + " уже существует!");
+            }
+            // Обновляем nextId, если ручной ID больше текущего
+            if (task.getId() >= nextId) {
+                nextId = task.getId() + 1;
+            }
+        } else {
+            // Автогенерация ID
+            task.setId(nextId++);
+        }
         tasks.put(task.getId(), task);
         return task;
     }
