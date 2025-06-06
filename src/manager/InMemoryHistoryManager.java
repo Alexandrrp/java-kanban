@@ -4,7 +4,7 @@ import task.Task;
 
 import java.util.ArrayList;
 
-public class MemoryHistoryManager implements HistoryManager {
+public class InMemoryHistoryManager implements HistoryManager {
     private static final int HISTORY_MAX_SIZE = 10;
     private final ArrayList<Task> history = new ArrayList<>();
 
@@ -14,13 +14,13 @@ public class MemoryHistoryManager implements HistoryManager {
             return;
         }
 
-        if (history.size() == HISTORY_MAX_SIZE) {
-            history.removeFirst();
-        }
-
         // Создаем копию задачи перед добавлением в историю
         Task taskCopy = copyTask(task);
         history.add(taskCopy);
+
+        if (history.size() == HISTORY_MAX_SIZE) {
+            history.remove(0);
+        }
     }
 
     @Override

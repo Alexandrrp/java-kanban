@@ -8,7 +8,7 @@ import task.Subtask;
 import task.Task;
 import task.Status;
 
-public class TaskManagerImplimentation implements TaskManager {
+public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Task> tasks = new HashMap<>();
     private HashMap<Integer, Epic> epics = new HashMap<>();
     private HashMap<Integer, Subtask> subtasks = new HashMap<>();
@@ -38,7 +38,12 @@ public class TaskManagerImplimentation implements TaskManager {
 
     @Override
     public Task getTask(int id) {
-        return tasks.get(id);
+
+        Task task = tasks.get(id);
+        if (task != null) {
+            historyManager.add(task);
+        }
+        return task;
     }
 
     @Override
@@ -79,7 +84,12 @@ public class TaskManagerImplimentation implements TaskManager {
 
     @Override
     public Epic getEpic(int id) {
-        return epics.get(id);
+
+        Epic epic = epics.get(id);
+        if (epic != null) {
+            historyManager.add(epic);
+        }
+        return epic;
     }
 
     @Override
@@ -172,7 +182,12 @@ public class TaskManagerImplimentation implements TaskManager {
 
     @Override
     public Subtask getSubtask(int id) {
-        return subtasks.get(id);
+
+        Subtask subtask = subtasks.get(id);
+        if (subtask != null) {
+            historyManager.add(subtask);
+        }
+        return subtask;
     }
 
     @Override
