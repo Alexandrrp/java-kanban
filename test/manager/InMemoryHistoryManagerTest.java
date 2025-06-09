@@ -10,15 +10,11 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryHistoryManagerTest {
-    private HistoryManager historyManager;
-
-    @BeforeEach
-    void setUp() {
-        historyManager = Managers.getDefaultHistory();
-    }
+    HistoryManager historyManager;
 
     @Test
     void ShouldSaveAllIssueVersionsInHistory() {
+        historyManager = Managers.getDefaultHistory();
         Task task = new Task("Task", Status.NEW, "Description");
         task.setId(1);
 

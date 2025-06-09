@@ -13,12 +13,10 @@ public class InMemoryHistoryManager implements HistoryManager {
         if (task == null) {
             return;
         }
+        Task copy = task.copyTask();
+        history.add(copy);
 
-        // Создаем копию задачи перед добавлением в историю
-        Task taskCopy = copyTask(task);
-        history.add(taskCopy);
-
-        if (history.size() == HISTORY_MAX_SIZE) {
+        if (history.size() > HISTORY_MAX_SIZE) {
             history.remove(0);
         }
     }
@@ -26,15 +24,5 @@ public class InMemoryHistoryManager implements HistoryManager {
     @Override
     public ArrayList<Task> getHistory() {
         return new ArrayList<>(history);
-    }
-
-    private Task copyTask(Task task) {
-        if (task == null) {
-            return null;
-        }
-
-        Task copy = new Task(task.getName(), task.getStatus(), task.getDescription());
-        copy.setId(task.getId());
-        return copy;
     }
 }
