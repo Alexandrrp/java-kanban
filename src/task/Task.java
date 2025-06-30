@@ -71,7 +71,6 @@ public class Task {
         return Objects.hash(id);
     }
 
-
     public Task copyTask (){
         Task copy = new Task(this.getName(), this.getStatus(), this.getDescription());
         copy.setId(this.getId());
