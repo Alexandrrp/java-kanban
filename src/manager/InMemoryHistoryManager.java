@@ -18,9 +18,10 @@ public class InMemoryHistoryManager implements HistoryManager {
             return;
         }
 
-        if (history.size() > HISTORY_MAX_SIZE) {
-            history.remove(0);
+        if (history.size() >= HISTORY_MAX_SIZE) {
+            remove(head.task.getId());  // Удаляем самый старый элемент
         }
+
         int id = task.getId();
         remove(id);
         Node newNode = new Node(task);
