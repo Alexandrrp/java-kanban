@@ -11,26 +11,71 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryHistoryManagerTest {
     HistoryManager historyManager;
+    Task task;
+    @BeforeEach
+    void setUp() {
+        historyManager = Managers.getDefaultHistory();
+        task = new Task("Task", Status.NEW, "Description");
+        task.setId(1);
+    }
 
     @Test
-    void ShouldSaveAllIssueVersionsInHistory() {
-        historyManager = Managers.getDefaultHistory();
-        Task task = new Task("Task", Status.NEW, "Description");
-        task.setId(1);
+    void shouldRemoveTaskFromHistory() {
+        historyManager.add(task);
+        historyManager.remove(task.getId());
+        assertTrue(historyManager.getHistory().isEmpty());
+    }
+
+    @Test
+    void shouldAddTasksToHistory() {
+        Task task1 = new Task("Task1", Status.DONE, "Description1");
+        task1.setId(2);
+        Task task2 = new Task("Task2", Status.IN_PROGRESS, "Description2");
+        task2.setId(3);
+        historyManager.add(task);
+        historyManager.add(task1);
+        historyManager.add(task2);
+
+        assertEquals(List.of(task, task1, task2), historyManager.getHistory());
+    }
+
+    @Test
+    void shouldNotAddDuplicatesTasks() {
+        historyManager.add(task);
+        historyManager.add(task);
+        // проверка на дубликаты
+        assertEquals(1, historyManager.getHistory().size());
+    }
+
+    @Test
+    void shouldNotAddAlreadyExistingTasksToHistory() {
+        Task task2 = new Task("Task 2", Status.IN_PROGRESS, "Description2");
+        task2.setId(2);
 
         historyManager.add(task);
-
-        task.setName("Updated name");
-        task.setStatus(Status.IN_PROGRESS);
+        historyManager.add(task2);
         historyManager.add(task);
 
         List<Task> history = historyManager.getHistory();
-        assertEquals(2, history.size()); // Проверяем, что в истории 2 элемента
-        assertEquals("Task", history.get(0).getName()); // Первая версия (старое имя)
-        assertEquals(Status.NEW, history.get(0).getStatus()); // Первая версия (старый статус)
-        assertEquals("Updated name", history.get(1).getName()); // Вторая версия (новое имя)
-        assertEquals(Status.IN_PROGRESS, history.get(1).getStatus()); // Вторая версия (новый статус)
+        assertEquals(2, history.size());
+        assertEquals(task2, history.get(0));
+        assertEquals(task, history.get(1));
     }
+    @Test
+    void shouldLimitHistorySize() {
+        // Добавляем 11 задач
+        for (int i = 1; i <= 11; i++) {
+            Task task = new Task("Task" + i, Status.NEW, "Description" + i);
+            task.setId(i);
+            historyManager.add(task);
+        }
 
-
+        List<Task> history = historyManager.getHistory();
+        // проверяем, что осталось только 10 последних
+        assertEquals(10, history.size());
+        // проверяем, что первая задача в истории теперь с id=2 (первая была удалена)
+        assertEquals(2, history.get(0).getId());
+        // проверяем, что теперь последняя задача с id=11
+        assertEquals(11, history.get(history.size() - 1).getId());
+    }
 }
