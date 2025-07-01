@@ -62,20 +62,20 @@ class InMemoryHistoryManagerTest {
         assertEquals(task, history.get(1));
     }
     @Test
-    void shouldLimitHistorySize() {
-        // Добавляем 11 задач
-        for (int i = 1; i <= 11; i++) {
+    void shouldNoLimitHistorySize() {
+        // Добавляем 15 задач
+        for (int i = 1; i <= 15; i++) {
             Task task = new Task("Task" + i, Status.NEW, "Description" + i);
             task.setId(i);
             historyManager.add(task);
         }
 
         List<Task> history = historyManager.getHistory();
-        // проверяем, что осталось только 10 последних
-        assertEquals(10, history.size());
-        // проверяем, что первая задача в истории теперь с id=2 (первая была удалена)
-        assertEquals(2, history.get(0).getId());
-        // проверяем, что теперь последняя задача с id=11
-        assertEquals(11, history.get(history.size() - 1).getId());
+        // проверяем, что теперь больше 10 задач (должно быть 15)
+        assertEquals(15, history.size());
+        // проверяем, что первая задача в истории теперь с id=1
+        assertEquals(1, history.get(0).getId());
+        // проверяем, что теперь последняя задача с id=15
+        assertEquals(15, history.get(history.size() - 1).getId());
     }
 }

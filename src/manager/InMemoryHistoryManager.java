@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private static final int HISTORY_MAX_SIZE = 10;
     private final Map<Integer, Node> history = new HashMap<>();
     private Node head;
     private Node tail;
@@ -16,10 +15,6 @@ public class InMemoryHistoryManager implements HistoryManager {
     public void add(Task task) {
         if (task == null) {
             return;
-        }
-
-        if (history.size() >= HISTORY_MAX_SIZE) {
-            remove(head.task.getId());  // Удаляем самый старый элемент
         }
 
         int id = task.getId();
