@@ -48,7 +48,9 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     private void removeNode(Node node) {
-        if (node == null) { return; }
+        if (node == null) {
+            return;
+        }
 
         if (node.prev != null) {
             node.prev.next = node.next;
