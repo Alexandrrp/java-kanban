@@ -96,7 +96,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager{
             case EPIC -> {
                 Epic epic = new Epic(name, description);
                 epic.setId(id);
-                epic.setStatus(status);
                 return epic;
             }
             case SUBTASK -> {

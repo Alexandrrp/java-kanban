@@ -42,23 +42,23 @@ class FileBackedTaskManagerTest {
         Epic epic = new Epic("Epic1", "Epic Description");
         manager.createEpic(epic);
 
-        Subtask subtask = new Subtask("Subtask 1", Status.DONE, "Subtask1 Description", epic.getId());
+        Subtask subtask = new Subtask("Subtask1", Status.DONE, "Subtask1 Description", epic.getId());
         manager.createSubtask(subtask);
         FileBackedTaskManager loadedManager = FileBackedTaskManager.loadFromFile(tempFile);
 
         List<Task> tasks = loadedManager.getAllTasks();
         assertEquals(2, tasks.size());
-        assertEquals("Task1", tasks.getFirst().getName());
-        assertEquals(Status.NEW, tasks.getFirst().getStatus());
+        assertEquals("Task1", tasks.get(0).getName());
+        assertEquals(Status.NEW, tasks.get(0).getStatus());
 
         List<Epic> epics = loadedManager.getAllEpics();
         assertEquals(1, epics.size());
-        assertEquals("Epic1", epics.getFirst().getName());
+        assertEquals("Epic1", epics.get(0).getName());
 
         List<Subtask> subtasks = loadedManager.getAllSubtasks();
         assertEquals(1, subtasks.size());
-        assertEquals("Subtask1", subtasks.getFirst().getName());
-        assertEquals(epic.getId(), subtasks.getFirst().getEpicId());
+        assertEquals("Subtask1", subtasks.get(0).getName());
+        assertEquals(epic.getId(), subtasks.get(0).getEpicId());
     }
 
     @Test
@@ -90,7 +90,7 @@ class FileBackedTaskManagerTest {
 
         List<Epic> epics = loadedManager.getAllEpics();
         assertEquals(1, epics.size());
-        assertEquals("Epic", epics.getFirst().getName());
+        assertEquals("Epic", epics.get(0).getName());
 
         List<Subtask> subtasks = loadedManager.getAllSubtasks();
         assertEquals(2, subtasks.size());
@@ -104,6 +104,6 @@ class FileBackedTaskManagerTest {
         task.setId(10);
         manager.createTask(task);
         FileBackedTaskManager loadedManager = FileBackedTaskManager.loadFromFile(tempFile);
-        assertEquals(10, loadedManager.getAllTasks().getFirst().getId());
+        assertEquals(10, loadedManager.getAllTasks().get(0).getId());
     }
 }
