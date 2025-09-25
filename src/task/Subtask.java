@@ -4,6 +4,7 @@ import java.util.Objects;
 
 public class Subtask extends Task {
     private int epicId;
+    protected TaskType type;
 
     public Subtask(String name, Status status, String description, int epicId) {
         super(name, status, description);
@@ -13,6 +14,11 @@ public class Subtask extends Task {
     public int getEpicId() {
         return epicId;
     }
+
+    public TaskType getType() {
+        return type;
+    }
+
 
     @Override
     public String toString() {

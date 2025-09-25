@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 public class Epic extends Task {
     private ArrayList<Integer> subtasksId;
+    protected TaskType type;
 
     public Epic(String name, String description) {
         super(name, Status.NEW, description);
@@ -25,6 +26,10 @@ public class Epic extends Task {
 
     public void updateStatus(Status status) {
         super.internalSetStatus(status);
+    }
+
+    public TaskType getType() {
+        return type;
     }
 
     @Override
