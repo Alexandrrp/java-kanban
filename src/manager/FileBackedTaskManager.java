@@ -10,7 +10,7 @@ import task.Task;
 import task.TaskType;
 import task.Status;
 
-public class FileBackedTaskManager extends InMemoryTaskManager{
+public class FileBackedTaskManager extends InMemoryTaskManager {
     private final File file;
 
     public FileBackedTaskManager(File file) {
@@ -110,7 +110,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager{
             }
         }
     }
-    
+
     @Override
     public Task createTask(Task task) {
         Task createdTask = super.createTask(task);
