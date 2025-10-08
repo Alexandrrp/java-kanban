@@ -46,19 +46,9 @@ class FileBackedTaskManagerTest {
         manager.createSubtask(subtask);
         FileBackedTaskManager loadedManager = FileBackedTaskManager.loadFromFile(tempFile);
 
-        List<Task> tasks = loadedManager.getAllTasks();
-        assertEquals(2, tasks.size());
-        assertEquals("Task1", tasks.get(0).getName());
-        assertEquals(Status.NEW, tasks.get(0).getStatus());
-
-        List<Epic> epics = loadedManager.getAllEpics();
-        assertEquals(1, epics.size());
-        assertEquals("Epic1", epics.get(0).getName());
-
-        List<Subtask> subtasks = loadedManager.getAllSubtasks();
-        assertEquals(1, subtasks.size());
-        assertEquals("Subtask1", subtasks.get(0).getName());
-        assertEquals(epic.getId(), subtasks.get(0).getEpicId());
+        assertEquals(manager.getAllTasks(), loadedManager.getAllTasks());
+        assertEquals(manager.getAllEpics(), loadedManager.getAllEpics());
+        assertEquals(manager.getAllSubtasks(), loadedManager.getAllSubtasks());
     }
 
     @Test
@@ -88,14 +78,8 @@ class FileBackedTaskManagerTest {
         manager.createSubtask(subtask2);
         FileBackedTaskManager loadedManager = FileBackedTaskManager.loadFromFile(tempFile);
 
-        List<Epic> epics = loadedManager.getAllEpics();
-        assertEquals(1, epics.size());
-        assertEquals("Epic", epics.get(0).getName());
-
-        List<Subtask> subtasks = loadedManager.getAllSubtasks();
-        assertEquals(2, subtasks.size());
-        assertEquals(epic.getId(), subtasks.get(0).getEpicId());
-        assertEquals(epic.getId(), subtasks.get(1).getEpicId());
+        assertEquals(manager.getAllEpics(), loadedManager.getAllEpics());
+        assertEquals(manager.getAllSubtasks(), loadedManager.getAllSubtasks());
     }
 
     @Test
