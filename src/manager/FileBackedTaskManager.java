@@ -12,6 +12,9 @@ import task.Status;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private final File file;
+    // Флаг для отслеживания процесса загрузки из файла
+    private boolean isLoading = false;
+
 
     public FileBackedTaskManager(File file) {
         this.file = file;
@@ -19,29 +22,65 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     public static FileBackedTaskManager loadFromFile(File file) {
         FileBackedTaskManager manager = new FileBackedTaskManager(file);
+            // Устанавливаем флаг загрузки, чтобы предотвратить сохранение во время загрузки
+        manager.isLoading = true;
+
         try {
             String content = Files.readString(file.toPath());
             String[] lines = content.split("\n");
 
+            int maxId = 0; // Для отслеживания максимального ID из файла
+            // Первый проход: создаем все задачи и находим максимальный ID
             for (int i = 1; i < lines.length; i++) {
                 String line = lines[i].trim();
                 if (!line.isEmpty()) {
                     Task task = fromString(line);
                     if (task != null) {
-                        switch (task.getType()) {
-                            case TASK -> manager.createTask(task);
-                            case EPIC -> manager.createEpic((Epic) task);
-                            case SUBTASK -> manager.createSubtask((Subtask) task);
-                            default -> throw new ManagerSaveException("Неизвестный тип задачи");
+                        int taskId = task.getId();
+                        // Обновляем максимальный ID
+                        if (taskId > maxId) {
+                            maxId = taskId;
+                        }
+
+                            // Добавляем напрямую в хешмапы родительского класса (область видимости protected)
+                            // Это предотвращает вызов методов создания, которые триггерят сохранение
+                            switch (task.getType()) {
+                                case TASK -> manager.tasks.put(taskId, task);
+                                case EPIC -> manager.epics.put(taskId, (Epic) task);
+                                case SUBTASK -> manager.subtasks.put(taskId, (Subtask) task);
+                                default -> throw new ManagerSaveException("Неизвестный тип задачи");
+                            }
                         }
                     }
                 }
+
+                // Синхронизируем счетчик ID: устанавливаем nextId на 1 больше максимального найденного ID
+                if (maxId >= manager.nextId) {
+                    manager.nextId = maxId + 1;
+                }
+
+                // Второй проход: восстанавливаем связи между подзадачами и эпиками
+                for (Subtask subtask : manager.subtasks.values()) {
+                    Epic epic = manager.epics.get(subtask.getEpicId());
+                    if (epic != null) {
+                        // Добавляем ID подзадачи в список подзадач эпика
+                        epic.addSubtaskId(subtask.getId());
+                    }
+                }
+
+                // Обновляем статусы всех эпиков после восстановления связей
+                for (Epic epic : manager.epics.values()) {
+                    manager.updateEpic(epic);
+                }
+
+            } catch (IOException e) {
+                throw new ManagerSaveException("Ошибка загрузки из файла");
+            } finally {
+                // Сбрасываем флаг загрузки независимо от результата
+                manager.isLoading = false;
             }
-        } catch (IOException e) {
-            throw new ManagerSaveException("Ошибка загрузки из файла");
+            return manager;
         }
-        return manager;
-    }
 
     private static String toString(Task task) {
         String type = task.getType().name();
