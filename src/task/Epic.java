@@ -27,6 +27,10 @@ public class Epic extends Task {
         super.internalSetStatus(status);
     }
 
+    public TaskType getType() {
+        return TaskType.EPIC;
+    }
+
     @Override
     public String toString() {
         return "task.Epic{" + "subtasksId=" + subtasksId + ", name='" + super.getName() + '\''

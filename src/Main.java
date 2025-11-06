@@ -1,6 +1,8 @@
-package task;
-
 import manager.*;
+import task.Epic;
+import task.Status;
+import task.Subtask;
+import task.Task;
 
 public class Main {
 
