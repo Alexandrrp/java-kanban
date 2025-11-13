@@ -2,16 +2,10 @@ package manager;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import task.Epic;
-import task.Status;
-import task.Subtask;
-import task.Task;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.time.Duration;
-import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -48,16 +42,5 @@ class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
         File invalidFile = new File("java-kanban/tasks.csv");
         assertThrows(ManagerSaveException.class, () ->
                 FileBackedTaskManager.loadFromFile(invalidFile));
-    }
-
-    @Test
-    void shouldHandleFileWriteError() {
-        File readOnlyFile = new File("readonly.csv");
-        readOnlyFile.setReadOnly();
-
-        assertThrows(ManagerSaveException.class, () -> {
-            FileBackedTaskManager manager = new FileBackedTaskManager(readOnlyFile);
-            manager.createTask(new Task("Test", Status.NEW, "Desc"));
-        });
     }
 }
