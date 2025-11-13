@@ -3,5 +3,8 @@ package task;
 public enum Status {
     NEW,
     IN_PROGRESS,
-    DONE
+    DONE;
+    public boolean isInProgress() {
+        return this == IN_PROGRESS;
+    }
 }

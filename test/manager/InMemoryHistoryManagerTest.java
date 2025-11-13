@@ -5,61 +5,70 @@ import org.junit.jupiter.api.Test;
 import task.Status;
 import task.Task;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryHistoryManagerTest {
     HistoryManager historyManager;
-    Task task;
+    private Task task1;
+    private Task task2;
+    private Task task3;
+
     @BeforeEach
     void setUp() {
-        historyManager = Managers.getDefaultHistory();
-        task = new Task("Task", Status.NEW, "Description");
-        task.setId(1);
+        historyManager = new InMemoryHistoryManager();
+        task1 = new Task("Task 1", Status.NEW, "Desc 1");
+        task1.setId(1);
+        task2 = new Task("Task 2", Status.IN_PROGRESS, "Desc 2");
+        task2.setId(2);
+        task3 = new Task("Task 3", Status.DONE, "Desc 3",
+                LocalDateTime.now(), Duration.ofMinutes(30));
+        task3.setId(3);
     }
 
     @Test
     void shouldRemoveTaskFromHistory() {
-        historyManager.add(task);
-        historyManager.remove(task.getId());
-        assertTrue(historyManager.getHistory().isEmpty());
+        historyManager.add(task1);
+        historyManager.add(task2);
+        historyManager.remove(task1.getId());
+
+        List<Task> history = historyManager.getHistory();
+        assertEquals(1, history.size());
+        assertEquals(task2, history.get(0));
     }
 
     @Test
     void shouldAddTasksToHistory() {
-        Task task1 = new Task("Task1", Status.DONE, "Description1");
-        task1.setId(2);
-        Task task2 = new Task("Task2", Status.IN_PROGRESS, "Description2");
-        task2.setId(3);
-        historyManager.add(task);
         historyManager.add(task1);
         historyManager.add(task2);
 
-        assertEquals(List.of(task, task1, task2), historyManager.getHistory());
+        List<Task> history = historyManager.getHistory();
+        assertEquals(2, history.size());
+        assertEquals(task1, history.get(0));
+        assertEquals(task2, history.get(1));
     }
 
     @Test
     void shouldNotAddDuplicatesTasks() {
-        historyManager.add(task);
-        historyManager.add(task);
+        historyManager.add(task1);
+        historyManager.add(task1);
         // проверка на дубликаты
         assertEquals(1, historyManager.getHistory().size());
     }
 
     @Test
     void shouldNotAddAlreadyExistingTasksToHistory() {
-        Task task2 = new Task("Task 2", Status.IN_PROGRESS, "Description2");
-        task2.setId(2);
-
-        historyManager.add(task);
+        historyManager.add(task1);
         historyManager.add(task2);
-        historyManager.add(task);
+        historyManager.add(task1);
 
         List<Task> history = historyManager.getHistory();
         assertEquals(2, history.size());
         assertEquals(task2, history.get(0));
-        assertEquals(task, history.get(1));
+        assertEquals(task1, history.get(1));
     }
     @Test
     void shouldNoLimitHistorySize() {
