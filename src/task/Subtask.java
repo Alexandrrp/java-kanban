@@ -22,7 +22,9 @@ public class Subtask extends Task {
         return epicId;
     }
 
-    public void setEpicId(int epicId) {this.epicId = epicId;}
+    public void setEpicId(int epicId) {
+        this.epicId = epicId;
+    }
 
     public TaskType getType() {
         return TaskType.SUBTASK;
