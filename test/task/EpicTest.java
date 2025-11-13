@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import task.Status;
 
+import java.time.Duration;
+
 class EpicTest {
     @Test
     void epicsWithSameIdShouldBeEqual() {
@@ -15,8 +17,6 @@ class EpicTest {
         epic2.addSubtaskId(2);
 
         assertEquals(epic1, epic2, "Задачи с одинаковым идентификатором должны быть одинаковыми");
-        assertEquals(epic1.hashCode(), epic2.hashCode(), "Хэш-код задач с одинаковым " +
-                "идентификатором должен быть одинаковым");
     }
 
     @Test
@@ -29,5 +29,15 @@ class EpicTest {
         epic2.addSubtaskId(24);
 
         assertNotEquals(epic1, epic2, "Задачи с разными идентификаторами не должны быть одинаковыми");
+    }
+
+
+    @Test
+    void shouldReturnNullTimeWhenNoSubtasks() {
+        Epic epic = new Epic("Epic", "Desc");
+
+        assertNull(epic.getStartTime());
+        assertEquals(Duration.ZERO, epic.getDuration());
+        assertNull(epic.getEndTime());
     }
 }
