@@ -5,7 +5,7 @@ import java.io.File;
 public class Managers {
 
     private static final File DEFAULT_FILE = new File("tasks.csv");
-    
+
     private Managers() {
     }
 
