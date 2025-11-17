@@ -15,4 +15,9 @@ class ManagersTest {
     void historyManagerShouldBeInitialized() {
         assertNotNull(Managers.getDefaultHistory());
     }
+
+    @Test
+    void fileBackedManagerShouldBeInitialized() {
+        assertNotNull(Managers.getFileBackedManager());
+    }
 }

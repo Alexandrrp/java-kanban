@@ -1,5 +1,7 @@
 package task;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Subtask extends Task {
@@ -10,8 +12,18 @@ public class Subtask extends Task {
         this.epicId = epicId;
     }
 
+    public Subtask(String name, Status status, String description,
+                   int epicId, LocalDateTime startTime, Duration duration) {
+        super(name, status, description, startTime, duration);
+        this.epicId = epicId;
+    }
+
     public int getEpicId() {
         return epicId;
+    }
+
+    public void setEpicId(int epicId) {
+        this.epicId = epicId;
     }
 
     public TaskType getType() {
@@ -24,7 +36,10 @@ public class Subtask extends Task {
         return "task.Subtask{" + "epicId=" + epicId + ", name='" + super.getName() + '\''
                 + ", id=" + super.getId() +
                 ", description='" + super.getDescription() + '\'' +
-                ", status=" + super.getStatus() + '}';
+                ", status=" + super.getStatus() +
+                ", startTime=" + super.getStartTime() +
+                ", duration=" + super.getDuration() +
+                ", endTime=" + super.getEndTime() + '}';
     }
 
     @Override
