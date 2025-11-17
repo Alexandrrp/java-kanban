@@ -8,11 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface TaskManager {
-    ArrayList<Task> getHistory();
+    List<Task> getHistory();
 
     List<Task> getPrioritizedTasks();
-
-    boolean hasTimeOverlap(Task task);
 
     //методы для класса task.Task
     List<Task> getAllTasks();

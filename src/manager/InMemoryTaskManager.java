@@ -20,7 +20,7 @@ public class InMemoryTaskManager implements TaskManager {
     );
 
     @Override
-    public ArrayList<Task> getHistory() {
+    public List<Task> getHistory() {
         return historyManager.getHistory();
     }
 
@@ -35,7 +35,6 @@ public class InMemoryTaskManager implements TaskManager {
         return new ArrayList<>(prioritizedTasks);
     }
 
-    @Override
     public boolean hasTimeOverlap(Task task) {
         if (task.getStartTime() == null || task.getEndTime() == null) {
             return false;
@@ -46,15 +45,13 @@ public class InMemoryTaskManager implements TaskManager {
                 .anyMatch(existingTask -> isTimeOverlapping(task, existingTask));
     }
 
-    private boolean isTimeOverlapping(Task task1, Task task2) {
-        return task1.getStartTime().isBefore(task2.getEndTime()) &&
-                task1.getEndTime().isAfter(task2.getStartTime());
+    private boolean isTimeOverlapping(Task firstTask, Task secondTask) {
+        return firstTask.getStartTime().isBefore(secondTask.getEndTime()) &&
+                firstTask.getEndTime().isAfter(secondTask.getStartTime());
     }
 
     private void addToPrioritizedTasks(Task task) {
-        if (task.getStartTime() != null) {
-            prioritizedTasks.add(task);
-        }
+        prioritizedTasks.add(task);
     }
 
     private void removeFromPrioritizedTasks(Task task) {

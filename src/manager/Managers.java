@@ -3,6 +3,7 @@ package manager;
 import java.io.File;
 
 public class Managers {
+    private static final File DEFAULT_FILE = new File("tasks.csv");
     private Managers() {
     }
 
@@ -14,7 +15,7 @@ public class Managers {
         return new InMemoryHistoryManager();
     }
 
-    public static TaskManager getFileBackedManager(File file) {
-        return new FileBackedTaskManager(file);
+    public static TaskManager getFileBackedManager() {
+        return new FileBackedTaskManager(DEFAULT_FILE);
     }
 }

@@ -22,7 +22,6 @@ public class Main {
 
         Epic epic1 = new Epic("Epic1", "Description1");
         taskManager.createEpic(epic1);
-        //taskManager.getEpic(epic1.getId());
         Subtask subtask1 = new Subtask("Subtask1.1", Status.NEW, "SubTask Description1.1",
                 epic1.getId(), LocalDateTime.of(2025, 9, 9, 9, 0),
                 Duration.ofHours(5));
@@ -32,7 +31,6 @@ public class Main {
                 epic1.getId(), LocalDateTime.of(2025, 9, 9, 16, 0),
                 Duration.ofMinutes(180));
         taskManager.createSubtask(subtask2);
-        //taskManager.getSubtask(subtask2.getId());
 
         Epic epic2 = new Epic("Epic2", "Desc1");
         taskManager.createEpic(epic2);
@@ -51,10 +49,14 @@ public class Main {
         System.out.println("Конец: " + epic1.getEndTime());
 
         // Проверка пересечений
-        Task overlappTask = new Task("Overlap", Status.NEW, "Desc",
-                LocalDateTime.of(2025, 9, 3, 13, 10), Duration.ofMinutes(30));
-        System.out.println("Имеет пересечения: " + taskManager.hasTimeOverlap(overlappTask));
-
+        try {
+            Task overlappTask = new Task("Overlap", Status.NEW, "Desc",
+                    LocalDateTime.of(2025, 9, 3, 13, 10), Duration.ofMinutes(30));
+            taskManager.createTask(overlappTask); // ← Вызовет исключение при пересечении
+            System.out.println("Задача создана успешно (пересечений нет)");
+        } catch (IllegalStateException e) {
+            System.out.println("Имеет пересечения: " + e.getMessage());
+        }
 
         System.out.println("Все задачи:");
         System.out.println(taskManager.getAllTasks());

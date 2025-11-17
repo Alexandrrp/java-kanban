@@ -128,7 +128,9 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         Task task2 = new Task("Task 2", Status.NEW, "Desc",
                 LocalDateTime.of(2023, 1, 1, 10, 15), Duration.ofMinutes(30));
 
-        assertTrue(taskManager.hasTimeOverlap(task2), "Должно быть пересечение по времени");
+        assertThrows(IllegalStateException.class,
+                () -> taskManager.createTask(task2),
+                "Должно быть пересечение по времени");
     }
 
     @Test
